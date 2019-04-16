@@ -1,2 +1,5 @@
 /server/node_modules
 /client/node_modules
+/server/public/images/villes
+/server/public/images/communes
+/server/public/images/objets
