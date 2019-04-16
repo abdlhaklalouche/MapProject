@@ -1,0 +1,28 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.undecorated,
+.undecorated:hover,
+.undecorated:focus {
+  text-decoration: none;
+  color: inherit
+}
+
+#top-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: #ffffff;
+  z-index: 1000;
+}
+
+.after-top-bar {
+  padding-top: 67px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

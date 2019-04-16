@@ -1,0 +1,20 @@
+{
+  "name": "map-project-server",
+  "version": "1.0.0",
+  "description": "Studying project",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "Abdelhak Lallouche",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "multer": "^1.4.1",
+    "mysql2": "^1.6.5",
+    "nodemon": "^1.18.11",
+    "sequelize": "^5.3.1",
+    "sharp": "^0.22.0"
+  }
+}
