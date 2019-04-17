@@ -37,7 +37,7 @@ class Commune extends Component {
   delete = (commune) => {
     if(window.confirm('Etes-vous sûr?')) {
       axios.get(`http://localhost:5000/communes/delete/${commune.id}`).then((response) => {
-        return this.props.history.push(`/communes/?villes=${commune.ville.id}`);
+        return this.props.history.push(`/communes/?ville=${commune.ville.id}`);
       });
     }
   }
@@ -82,15 +82,19 @@ class Commune extends Component {
                       <dd className="col-sm-7">{commune.objets.length}</dd>
                     </dl>
                   </ListGroupItem>
-                  {commune.details.map(detail => 
-                  (<AttributList detail={detail} />)
+                  {commune.details.map((detail, i) => 
+                    (
+                      <div key={i}>
+                        <AttributList detail={detail} />
+                      </div>
+                    )
                   )}
                 </ListGroup>
               </Col>
               <Col sm="5">
                 <div>
                   {commune.images.map((image, key) => {
-                    return (<img src={`http://localhost:5000/images/communes/${image.nom}`} alt="" width="150" height="150" className="m-1" />)
+                    return (<img src={`http://localhost:5000/images/communes/${image.nom}`} alt="" key={key} width="150" height="150" className="m-1" />)
                   })}
                 </div>
               </Col>

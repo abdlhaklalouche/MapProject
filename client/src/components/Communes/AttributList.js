@@ -7,6 +7,7 @@ export default class AttributList extends Component {
     let output = '';
     switch(detail.communes_attribut.communes_attributs_type.nom) {
       case 'string':
+      case 'text':
         output = detail.valeur;
       break;
       case 'checkbox':

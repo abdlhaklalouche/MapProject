@@ -162,7 +162,7 @@ exports.add = async function(req, res) {
 }
 
 exports.edit = function(req, res) {
-  const { villes_id, nom,  code_postal, details} = req.body;
+  const { villes_id, nom, details} = req.body;
   const images = req.files;
   const parsedDetails = JSON.parse(details);
   const imagePath = path.join(__dirname, '../public/images/communes');
@@ -188,7 +188,7 @@ exports.edit = function(req, res) {
     ]
   }).then(commune => {
     commune.update({
-      villes_id, nom, code_postal
+      villes_id, nom
     }).then(commune => {
       CommuneAttributDetail.destroy({
         where: {
