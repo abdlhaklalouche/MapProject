@@ -89,13 +89,13 @@ exports.edit = function(req, res) {
     category.update({
       nom
     }).then(category => {
-      CategoryAttribut.delete({
+      CategoryAttribut.destroy({
         where: {
-          id: category.id
+          categories_id: category.id
         }
       }).then(() => {
-        parsedAttributs.map(attribut => {
-          CategoryAttribut.create({
+        parsedAttributs.map(async attribut => {
+          await CategoryAttribut.create({
             nom: attribut.nom,
             optionnel: attribut.optionnel,
             categories_attributs_types_id: attribut.type,

@@ -22,7 +22,7 @@ import EditCommune from './components/Communes/Edit';
 import Categories from './components/Categories/All';
 import Category from './components/Categories/View';
 import AddCategory from './components/Categories/Add';
-// import EditCategory from './components/Categories/Edit';
+import EditCategory from './components/Categories/Edit';
 
 // import Objets from './components/Objets/All';
 // import Objet from './components/Objets/View';
@@ -48,7 +48,7 @@ ReactDOM.render(
 
         <Route exact path="/categories"  component={Categories} />
         <Route path="/categories/add"  component={AddCategory} />
-        {/* <Route path="/categories/edit/:id/"  component={EditCategory} /> */}
+        <Route path="/categories/edit/:id/"  component={EditCategory} />
         <Route path="/categories/:id"  component={Category} />
 
         {/* <Route exact path="/objets"  component={Objets} />

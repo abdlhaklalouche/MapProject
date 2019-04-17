@@ -9,7 +9,7 @@ router.get('/types', CategoriesController.types);
 
 router.post('/add', upload.none(), CategoriesController.add);
 
-router.post('/edit/:id', CategoriesController.edit);
+router.post('/edit/:id', upload.none(), CategoriesController.edit);
 
 router.get('/:id', CategoriesController.single);
 
