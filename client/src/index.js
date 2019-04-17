@@ -18,10 +18,16 @@ import Commune from './components/Communes/View';
 import AddCommune from './components/Communes/Add';
 import EditCommune from './components/Communes/Edit';
 
+
 import Categories from './components/Categories/All';
 import Category from './components/Categories/View';
-// import AddCategory from './components/Categories/Add';
+import AddCategory from './components/Categories/Add';
+// import EditCategory from './components/Categories/Edit';
 
+// import Objets from './components/Objets/All';
+// import Objet from './components/Objets/View';
+// import AddObjet from './components/Communes/Add';
+// import EditObjet from './components/Objets/Edit';
 
 ReactDOM.render(
   <BrowserRouter>
@@ -41,9 +47,14 @@ ReactDOM.render(
         <Route path="/communes/:id"  component={Commune} />
 
         <Route exact path="/categories"  component={Categories} />
-        {/* <Route path="/categories/add"  component={AddCategory} /> */}
+        <Route path="/categories/add"  component={AddCategory} />
+        {/* <Route path="/categories/edit/:id/"  component={EditCategory} /> */}
         <Route path="/categories/:id"  component={Category} />
 
+        {/* <Route exact path="/objets"  component={Objets} />
+        <Route path="/objets/add"  component={AddObjet} />
+        <Route path="/objets/edit/:id/"  component={EditObjet} />
+        <Route path="/objets/:id"  component={Objet} /> */}
 
       </Switch>
   </BrowserRouter>

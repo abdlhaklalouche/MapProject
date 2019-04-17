@@ -6,7 +6,8 @@ import {
   Col,
   Button,
   ListGroup,
-  ListGroupItem
+  ListGroupItem,
+  Table
 } from 'reactstrap';
 import Back from '../Back';
 const axios = require('axios');
@@ -49,7 +50,7 @@ class Villes extends Component {
           <Back title={`${category.nom}`} />
           <Container fluid className="mt-2 after-top-bar">
             <Row>
-              <Col sm="7">
+              <Col sm="9">
                 <div className="py-3">
                   <Link to={`/categories/edit/${category.id}`}>
                     <Button color="secondary" size="sm" className="mr-1">Modifier</Button>
@@ -59,14 +60,39 @@ class Villes extends Component {
                 <ListGroup flush>
                   <ListGroupItem>
                     <dl className="row my-0">
-                      <dt className="col-sm-5">Numero de la category</dt>
-                      <dd className="col-sm-7">{category.id}</dd>
+                      <dt className="col-sm-4">Numero de la category</dt>
+                      <dd className="col-sm-8">{category.id}</dd>
                     </dl>
                   </ListGroupItem>
                   <ListGroupItem tag={Link} to={`/objets/?category=${category.id}`} className="bg-light undecorated">
                     <dl className="row my-0">
-                      <dt className="col-sm-5">Objets</dt>
-                      <dd className="col-sm-7">{category.objets.length}</dd>
+                      <dt className="col-sm-4">Objets</dt>
+                      <dd className="col-sm-8">{category.objets.length}</dd>
+                    </dl>
+                  </ListGroupItem>
+                  <ListGroupItem>
+                    <dl className="row my-0">
+                      <dt className="col-sm-4">Les attributs</dt>
+                      <dd className="col-sm-8">
+                        <Table borderless striped>
+                          <thead>
+                            <tr>
+                              <th>Nom</th>
+                              <th>Type</th>
+                              <th>Optionnel</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {category.attributs.map((attribut, key) => (
+                              <tr key={key}>
+                                <td>{attribut.nom}</td>
+                                <td>{attribut.categories_attributs_type.nom}</td>
+                                <td>{attribut.optionnel ? 'Oui' : 'No'}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </Table>
+                      </dd>
                     </dl>
                   </ListGroupItem>
                 </ListGroup>

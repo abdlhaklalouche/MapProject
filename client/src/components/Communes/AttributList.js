@@ -11,7 +11,7 @@ export default class AttributList extends Component {
         output = detail.valeur;
       break;
       case 'checkbox':
-        output = (parseInt(detail.valeur) > 0) ? 'Oui' : 'No';
+        output = 'Oui';
       break;
       default:
       break;
