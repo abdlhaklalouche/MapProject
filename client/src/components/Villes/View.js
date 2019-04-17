@@ -109,7 +109,7 @@ class Ville extends Component {
               <Col sm="5">
                 <div>
                   {ville.images.map((image, key) => {
-                    return (<img src={`http://localhost:5000/images/villes/${image.nom}`} alt="" width="150" height="150" className="m-1" />)
+                    return (<img src={`http://localhost:5000/images/villes/${image.nom}`} key={key} alt="" width="150" height="150" className="m-1" />)
                   })}
                 </div>
               </Col>

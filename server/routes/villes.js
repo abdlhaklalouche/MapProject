@@ -10,11 +10,12 @@ router.get('/attributs', VillesController.attributs);
 
 router.post('/add', upload.array('images'), VillesController.add);
 
-router.post('/edit/:id', VillesController.edit);
+router.post('/edit/:id', upload.array('images'), VillesController.edit);
 
 router.get('/delete/:id', VillesController.delete);
 
 router.get('/:id', VillesController.single);
 
+router.get('/images/delete/:id', VillesController.deleteImage);
 
 module.exports = router;

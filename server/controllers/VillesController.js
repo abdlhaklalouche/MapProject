@@ -93,6 +93,24 @@ exports.delete = function(req, res) {
   });
 }
 
+exports.deleteImage = function(req, res) {
+  VilleImage.findOne({
+    where: {
+      id: req.params.id
+    }
+  }).then(image => {
+    VilleImage.destroy({
+      where: {
+        id: image.id
+      }
+    }).then(() => {
+      fs.unlinkSync(path.join(__dirname, `../public/images/villes/${image.nom}`));
+      return res.sendStatus(200);
+    }).catch(err => {
+    })
+  });
+}
+
 exports.attributs = function(req, res) {
   VilleAttribut.findAll({
     include: [{
@@ -133,5 +151,57 @@ exports.add = async function(req, res) {
 }
 
 exports.edit = function(req, res) {
+  const { nom,  superficie, population, details} = req.body;
+  const images = req.files;
+  const parsedDetails = JSON.parse(details);
+  const imagePath = path.join(__dirname, '../public/images/villes');
+  const fileUpload = new Resize(imagePath);
 
+  Ville.findOne({
+    where: {
+      id: req.params.id,
+    },
+    include: [
+      {
+        model: VilleAttributDetail,
+        as: "details",
+        include: [{
+          model: VilleAttribut,
+          as: "villes_attribut",
+          include: [{
+            model: VilleAttributType,
+            "as": "villes_attributs_type"
+          }]
+        }]
+      },
+    ]
+  }).then(ville => {
+    ville.update({
+      nom, superficie, population
+    }).then(ville => {
+      VilleAttributDetail.destroy({
+        where: {
+          villes_id: ville.id
+        }
+      }).then(() => {
+        parsedDetails.map(detail => {
+          VilleAttributDetail.create({
+            valeur: detail.valeur,
+            villes_id: ville.id,
+            villes_attributs_id: detail.attribut_id
+          })
+        });
+      });
+      images.map(async image => {
+        const filename = await fileUpload.save(image.buffer);
+        VilleImage.create({
+          nom: filename,
+          villes_id: ville.id
+        });
+      });
+      return res.sendStatus(200);
+    })
+  }).catch(err => {
+    return res.sendStatus(403);
+  });
 }

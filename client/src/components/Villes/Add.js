@@ -31,7 +31,16 @@ class AddVille extends Component {
     });
   }
 
-  handleChange = e => this.setState({[e.target.name]: e.target.value});
+  handleChange = e => {
+    switch(e.target.type) {
+      case 'checkbox':
+        this.setState({[e.target.name]: e.target.checked});
+      break;
+      default:
+        this.setState({[e.target.name]: e.target.value});
+      break;
+    }
+  };
   
   handleImagesChange = e => this.setState({images: e.target.files})
 
@@ -64,10 +73,12 @@ class AddVille extends Component {
             formData.append('images', file);
           }
           attributs.map(attribut => {
-            return details.push({
-              valeur: this.state[attribut.nom.toLowerCase()],
-              attribut_id: attribut.id
-            });
+            if(this.state[attribut.nom.toLowerCase()]) {
+              return details.push({
+                valeur: this.state[attribut.nom.toLowerCase()],
+                attribut_id: attribut.id
+              });
+            }
           });
           formData.append('details', JSON.stringify(details));
           axios.post('http://localhost:5000/villes/add', formData, {

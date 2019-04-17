@@ -11,7 +11,7 @@ import Statistics from './components/Statistics';
 import Villes from './components/Villes/All';
 import Ville from './components/Villes/View';
 import AddVille from './components/Villes/Add';
-// import EditVille from './components/Villes/Edit';
+import EditVille from './components/Villes/Edit';
 
 import Communes from './components/Communes/All';
 import Commune from './components/Communes/View';
@@ -30,7 +30,7 @@ ReactDOM.render(
 
         <Route exact path="/villes"  component={Villes} />
         <Route path="/villes/add"  component={AddVille} />
-        {/* <Route path="/villes/edit/:id/"  component={EditVille} /> */}
+        <Route path="/villes/edit/:id/"  component={EditVille} />
         <Route path="/villes/:id"  component={Ville} />
 
         <Route exact path="/communes"  component={Communes} />
