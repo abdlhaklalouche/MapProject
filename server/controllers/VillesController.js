@@ -66,6 +66,15 @@ exports.single = function(req, res) {
   }).then(ville => res.json(ville));
 }
 
+exports.attributs = function(req, res) {
+  VilleAttribut.findAll({
+    include: [{
+      model: VilleAttributType,
+      as: "villes_attributs_type"
+    }]
+  }).then(attributs => res.json(attributs));
+}
+
 exports.delete = function(req, res) {
   Ville.findOne({
     where: {
@@ -107,17 +116,9 @@ exports.deleteImage = function(req, res) {
       fs.unlinkSync(path.join(__dirname, `../public/images/villes/${image.nom}`));
       return res.sendStatus(200);
     }).catch(err => {
+      return res.sendStatus(403);
     })
   });
-}
-
-exports.attributs = function(req, res) {
-  VilleAttribut.findAll({
-    include: [{
-      model: VilleAttributType,
-      as: "villes_attributs_type"
-    }]
-  }).then(attributs => res.json(attributs));
 }
 
 exports.add = async function(req, res) {

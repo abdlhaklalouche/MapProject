@@ -104,7 +104,7 @@ class AddVille extends Component {
             <Col sm="6">
               <div>
                 <FormGroup>
-                  <Label for="numero">Numero <span className="text-danger">*</span></Label>
+                  <Label>Numero <span className="text-danger">*</span></Label>
                   <Input type="text" name="numero" onChange={this.handleChange} />
                 </FormGroup>
                 <FormGroup>

@@ -15,6 +15,8 @@ import EditVille from './components/Villes/Edit';
 
 import Communes from './components/Communes/All';
 import Commune from './components/Communes/View';
+import AddCommune from './components/Communes/Add';
+import EditCommune from './components/Communes/Edit';
 
 import Categories from './components/Categories/All';
 import Category from './components/Categories/View';
@@ -34,6 +36,8 @@ ReactDOM.render(
         <Route path="/villes/:id"  component={Ville} />
 
         <Route exact path="/communes"  component={Communes} />
+        <Route path="/communes/add"  component={AddCommune} />
+        <Route path="/communes/edit/:id/"  component={EditCommune} />
         <Route path="/communes/:id"  component={Commune} />
 
         <Route exact path="/categories"  component={Categories} />

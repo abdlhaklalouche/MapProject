@@ -14,8 +14,9 @@ router.post('/edit/:id', upload.array('images'), VillesController.edit);
 
 router.get('/delete/:id', VillesController.delete);
 
+router.get('/images/delete/:id', VillesController.deleteImage);
+
 router.get('/:id', VillesController.single);
 
-router.get('/images/delete/:id', VillesController.deleteImage);
 
 module.exports = router;

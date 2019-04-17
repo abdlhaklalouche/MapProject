@@ -34,10 +34,10 @@ class Commune extends Component {
     });    
   }
 
-  delete = (commune_id) => {
+  delete = (commune) => {
     if(window.confirm('Etes-vous sûr?')) {
-      axios.get(`http://localhost:5000/villes/communes/${commune_id}`).then((response) => {
-        return this.props.history.push(`/communes`);
+      axios.get(`http://localhost:5000/communes/delete/${commune.id}`).then((response) => {
+        return this.props.history.push(`/communes/?villes=${commune.ville.id}`);
       });
     }
   }
@@ -55,7 +55,7 @@ class Commune extends Component {
                   <Link to={`/communes/edit/${commune.id}`}>
                     <Button color="secondary" size="sm" className="mr-1">Modifier</Button>
                   </Link>
-                  <Button color="danger" size="sm" className="ml-1" onClick={() => this.delete(commune.id)}>Supprimé</Button>
+                  <Button color="danger" size="sm" className="ml-1" onClick={() => this.delete(commune)}>Supprimé</Button>
                 </div>
                 <ListGroup flush>
                   <ListGroupItem>
