@@ -13,7 +13,7 @@ import axios from 'axios';
 class AddObjet extends Component {
   state = {
     categories: [],
-    category: {},
+    category: false,
     villes: [],
     ville: false,
     communes: [],

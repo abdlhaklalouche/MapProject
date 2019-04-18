@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 const Objet = require('../models/Objet');
+const Commune = require('../models/Commune');
+const Category = require('../models/Category');
 const ObjetImage = require('../models/ObjetImage');
 const CategoryAttribut = require('../models/CategoryAttribut');
 const CategoryAttributType = require('../models/CategoryAttributType');
@@ -24,6 +26,22 @@ exports.single = function(req, res) {
       {
         model: ObjetImage,
         as: "images"
+      },
+      {
+        model: Commune,
+        as: "commune"
+      },
+      {
+        model: Category,
+        as: "category",
+        include: [{
+          model: CategoryAttribut,
+          as: "attributs",
+          include: [{
+            model: CategoryAttributType,
+            as: "categories_attributs_type"
+          }]
+        }]
       },
       {
         model: ObjetAttributDetail,
@@ -118,5 +136,47 @@ exports.add = async function(req, res) {
 }
 
 exports.edit = function(req, res) {
-  
+  const { communes_id, categories_id, nom, description, details} = req.body;
+  const images = req.files;
+  const parsedDetails = JSON.parse(details);
+  const imagePath = path.join(__dirname, '../public/images/objets');
+  const fileUpload = new Resize(imagePath);
+
+  Objet.findOne({
+    where: {
+      id: req.params.id
+    },
+  }).then(objet => {
+    objet.update({
+      communes_id, categories_id, nom, description
+    }).then(objet => {
+      ObjetAttributDetail.destroy({
+        where: {
+          objets_id: objet.id
+        }
+      }).then(() => {
+        parsedDetails.map(detail => {
+          ObjetAttributDetail.create({
+            valeur: detail.valeur,
+            objets_id: objet.id,
+            categories_attributs_id: detail.attribut_id
+          })
+        });
+        images.map(async image => {
+        const filename = await fileUpload.save(image.buffer);
+          ObjetImage.create({
+            nom: filename,
+            objets_id: objet.id
+          });
+        });
+        return res.sendStatus(200);
+      }).catch(err => {
+        return res.sendStatus(403);
+      });
+    }).catch(err => {
+      return res.sendStatus(403);
+    });
+  }).catch(err => {
+    return res.sendStatus(403);
+  });
 }
