@@ -11,10 +11,20 @@ exports.all = function(req, res) {
     where['nom'] = { [Op.like]: '%' + req.query.query + '%' }
   Category.findAll({
     where,
-    include: [{
-      model: Objet,
-      as: "objets"
-    }]
+    include: [
+      {
+        model: Objet,
+        as: "objets"
+      },
+      {
+        model: CategoryAttribut,
+        as: "attributs",
+        include: [{
+          model: CategoryAttributType,
+          as: "categories_attributs_type"
+        }]
+      }
+    ]
   }).then(categories => res.json(categories));
 }
 

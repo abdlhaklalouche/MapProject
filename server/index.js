@@ -19,5 +19,6 @@ app.use(express.static('public'))
 app.use('/villes', require('./routes/villes'));
 app.use('/communes', require('./routes/communes'));
 app.use('/categories', require('./routes/categories'));
+app.use('/objets', require('./routes/objets'));
 
 app.listen(port, () => console.log(`Server listening on port ${port}!`))
