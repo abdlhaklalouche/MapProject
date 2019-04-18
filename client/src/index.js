@@ -24,8 +24,8 @@ import Category from './components/Categories/View';
 import AddCategory from './components/Categories/Add';
 import EditCategory from './components/Categories/Edit';
 
-// import Objets from './components/Objets/All';
-// import Objet from './components/Objets/View';
+import Objets from './components/Objets/All';
+import Objet from './components/Objets/View';
 import AddObjet from './components/Objets/Add';
 // import EditObjet from './components/Objets/Edit';
 
@@ -51,10 +51,10 @@ ReactDOM.render(
         <Route path="/categories/edit/:id/"  component={EditCategory} />
         <Route path="/categories/:id"  component={Category} />
 
+        <Route exact path="/objets"  component={Objets} />
         <Route path="/objets/add"  component={AddObjet} />
-        {/* <Route exact path="/objets"  component={Objets} />
-        <Route path="/objets/edit/:id/"  component={EditObjet} />
-        <Route path="/objets/:id"  component={Objet} /> */}
+        {/* <Route path="/objets/edit/:id/"  component={EditObjet} /> */}
+        <Route path="/objets/:id"  component={Objet} />
 
       </Switch>
   </BrowserRouter>
