@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const Objet = require('../models/Objet');
+const Ville = require('../models/Ville');
 const Commune = require('../models/Commune');
 const Category = require('../models/Category');
 const ObjetImage = require('../models/ObjetImage');
@@ -13,8 +14,35 @@ const Op = Sequelize.Op;
 
 const Resize = require('../helpers/Resizer');
 
-exports.all = function(req, res) {
-
+exports.all = async function(req, res) {
+  let where = {};
+  if(req.query.query)
+    where['nom'] = { [Op.like]: '%' + req.query.query + '%' }
+  if(req.query.category)
+    where['categories_id'] = req.query.category
+  if(req.query.commune)
+    where['communes_id'] = req.query.commune
+  else {
+    if(req.query.ville) {
+      const ville = await Ville.findOne({
+        where: {
+          id: req.query.ville
+        },
+        include: [{
+          model: Commune,
+          as: "communes"
+        }]
+      });
+      if(ville) {
+        let commune_ids = [];
+        ville.communes.map(commune => {
+          commune_ids.push(commune.id);
+        });
+        where['communes_id'] = { [Op.in]: [...commune_ids] }
+      }
+    }
+  }
+  Objet.findAll({where}).then(objets => res.json(objets));
 }
 
 exports.single = function(req, res) {

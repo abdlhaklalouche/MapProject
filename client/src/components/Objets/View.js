@@ -57,6 +57,18 @@ class Objet extends Component {
                   <Button color="danger" size="sm" className="ml-1" onClick={() => this.delete(objet.id)}>Supprimé</Button>
                 </div>
                 <ListGroup flush>
+                  <ListGroupItem tag={Link} to={`/communes/${objet.commune.id}`} className="bg-light undecorated">
+                    <dl className="row my-0">
+                      <dt className="col-sm-5">La commune</dt>
+                      <dd className="col-sm-7">{objet.commune.nom}</dd>
+                    </dl>
+                  </ListGroupItem>
+                  <ListGroupItem tag={Link} to={`/categories/${objet.category.id}`} className="bg-light undecorated">
+                    <dl className="row my-0">
+                      <dt className="col-sm-5">La category</dt>
+                      <dd className="col-sm-7">{objet.category.nom}</dd>
+                    </dl>
+                  </ListGroupItem>
                   <ListGroupItem>
                     <dl className="row my-0">
                       <dt className="col-sm-5">Description</dt>

@@ -29,7 +29,7 @@ class Home extends Component {
             <Col sm="10" md="8">
               <Form action="/objets" method="get">            
                 <FormGroup>
-                  <Input type="text" name="search" id="search" placeholder="Rechercher..."/>
+                  <Input type="text" name="query" id="search" placeholder="Rechercher..."/>
                 </FormGroup>
                 <Row form>
                   <Col md={5}>
