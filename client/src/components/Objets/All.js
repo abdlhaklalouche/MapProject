@@ -99,7 +99,7 @@ class Objets extends Component {
   render() {
     return (
       <div>
-        <Back title="Les villes de l'algerie" />
+        <Back title="Les objet dans l'algerie" />
         <Container className="mt-2 after-top-bar">
           <div className="py-2">
             <Form action="/objets" method="get">            
