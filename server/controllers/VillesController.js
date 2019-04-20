@@ -3,6 +3,8 @@ const path = require('path');
 const Ville = require('../models/Ville');
 const Commune = require('../models/Commune');
 const VilleImage = require('../models/VilleImage');
+const CommuneImage = require('../models/CommuneImage');
+const ObjetImage = require('../models/ObjetImage');
 const Objet = require('../models/Objet');
 const VilleAttribut = require('../models/VilleAttribut');
 const VilleAttributType = require('../models/VilleAttributType');
@@ -85,10 +87,38 @@ exports.delete = function(req, res) {
         model: VilleImage,
         as: "images"
       },
+      {
+        model: Commune,
+        as: "communes",
+        include: [
+          {
+            model: Objet,
+            as: "objets",
+            include: [{
+              model: ObjetImage,
+              as: "images"
+            }]
+          },
+          {
+            model: CommuneImage,
+            as: "images"
+          }
+        ]
+      },
     ]
-  }).then(ville => {
+  }).then(async ville => {
     ville.images.map(image => {
-      fs.unlink(path.join(__dirname, `../public/images/villes/${image.nom}`));
+      await fs.unlink(path.join(__dirname, `../public/images/villes/${image.nom}`));
+    });
+    ville.communes.map(commune => {
+      commune.image.map(image => {
+        await fs.unlink(path.join(__dirname, `../public/images/communes/${image.nom}`));
+      });
+      commune.objets.map(objet => {
+        objet.images.map(image => {
+          await fs.unlink(path.join(__dirname, `../public/images/objets/${image.nom}`));
+        });
+      })
     });
     Ville.destroy({
       where: {

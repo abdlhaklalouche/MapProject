@@ -1,5 +1,6 @@
 const Category = require('../models/Category');
 const Objet = require('../models/Objet');
+const ObjetImage = require('../models/ObjetImage');
 const CategoryAttribut = require('../models/CategoryAttribut');
 const CategoryAttributType = require('../models/CategoryAttributType');
 const Sequelize = require('sequelize');
@@ -51,15 +52,36 @@ exports.single = function(req, res) {
 }
 
 exports.delete = function(req, res) {
-  Category.destroy({
+  Category.findOne({
     where: {
-      id: req.params.id,
-    }
-  }).then(() => {
-    return res.sendStatus(200);
+      id: req.params.id
+    },
+    include: [{
+      model: Objet,
+      as: "objets",
+      include: [{
+        model: ObjetImage,
+        as: "images"
+      }]
+    }]
+  }).then(async category => {
+    category.objets.map(objet => {
+      objet.images.map(image => {
+        await fs.unlink(path.join(__dirname, `../public/images/objets/${image.nom}`));
+      });
+    })
+    Category.destroy({
+      where: {
+        id: category.id,
+      },
+    }).then(async () => {
+      return res.sendStatus(200);
+    }).catch(err => {
+      return res.sendStatus(403);
+    });
   }).catch(err => {
     return res.sendStatus(403);
-  });
+  })
 }
 
 exports.types = function(req, res) {

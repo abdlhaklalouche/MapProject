@@ -3,6 +3,7 @@ const path = require('path');
 const Commune = require('../models/Commune');
 const Ville = require('../models/Ville');
 const Objet = require('../models/Objet');
+const ObjetImage = require('../models/ObjetImage');
 const CommuneImage = require('../models/CommuneImage');
 const CommuneAttribut = require('../models/CommuneAttribut');
 const CommuneAttributType = require('../models/CommuneAttributType');
@@ -65,12 +66,33 @@ exports.single = function(req, res) {
 }
 
 exports.delete = function(req, res) {
-  Commune.destroy({
+  Commune.findOne({
     where: {
       id: req.params.id,
-    }
-  }).then(() => {
-    return res.sendStatus(200);
+    },
+    include: [{
+      model: Objet,
+      as: "objets",
+      include: [{
+        model: ObjetImage,
+        as: "images"
+      }]
+    }]
+  }).then(async commune => {
+    commune.objets.map(objet => {
+      objet.images.map(image => {
+        await fs.unlink(path.join(__dirname, `../public/images/objets/${image.nom}`));
+      });
+    })
+    Commune.destroy({
+      where: {
+        id: commune.id,
+      }
+    }).then(() => {
+      return res.sendStatus(200);
+    }).catch(err => {
+      return res.sendStatus(403);
+    });
   }).catch(err => {
     return res.sendStatus(403);
   });
