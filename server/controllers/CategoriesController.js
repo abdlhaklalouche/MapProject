@@ -65,8 +65,8 @@ exports.delete = function(req, res) {
       }]
     }]
   }).then(async category => {
-    category.objets.map(objet => {
-      objet.images.map(image => {
+    category.objets.map(async objet => {
+      objet.images.map(async image => {
         await fs.unlink(path.join(__dirname, `../public/images/objets/${image.nom}`));
       });
     })

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Container, Row, Col,
-  Table
+  Container, Row, Col
 } from 'reactstrap';
 import Back from './Back';
 const axios = require('axios');

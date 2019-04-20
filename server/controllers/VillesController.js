@@ -107,15 +107,15 @@ exports.delete = function(req, res) {
       },
     ]
   }).then(async ville => {
-    ville.images.map(image => {
+    ville.images.map(async image => {
       await fs.unlink(path.join(__dirname, `../public/images/villes/${image.nom}`));
     });
-    ville.communes.map(commune => {
-      commune.image.map(image => {
+    ville.communes.map(async commune => {
+      commune.image.map(async image => {
         await fs.unlink(path.join(__dirname, `../public/images/communes/${image.nom}`));
       });
-      commune.objets.map(objet => {
-        objet.images.map(image => {
+      commune.objets.map(async objet => {
+        objet.images.map(async image => {
           await fs.unlink(path.join(__dirname, `../public/images/objets/${image.nom}`));
         });
       })

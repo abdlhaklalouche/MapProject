@@ -79,8 +79,8 @@ exports.delete = function(req, res) {
       }]
     }]
   }).then(async commune => {
-    commune.objets.map(objet => {
-      objet.images.map(image => {
+    commune.objets.map(async objet => {
+      objet.images.map(async image => {
         await fs.unlink(path.join(__dirname, `../public/images/objets/${image.nom}`));
       });
     })
