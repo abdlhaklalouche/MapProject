@@ -111,7 +111,7 @@ exports.delete = function(req, res) {
       await fs.unlink(path.join(__dirname, `../public/images/villes/${image.nom}`));
     });
     ville.communes.map(async commune => {
-      commune.image.map(async image => {
+      commune.images.map(async image => {
         await fs.unlink(path.join(__dirname, `../public/images/communes/${image.nom}`));
       });
       commune.objets.map(async objet => {

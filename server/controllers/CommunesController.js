@@ -70,15 +70,24 @@ exports.delete = function(req, res) {
     where: {
       id: req.params.id,
     },
-    include: [{
-      model: Objet,
-      as: "objets",
-      include: [{
-        model: ObjetImage,
+    include: [
+      {
+        model: Objet,
+        as: "objets",
+        include: [{
+          model: ObjetImage,
+          as: "images"
+        }]
+      },
+      {
+        model: CommuneImage,
         as: "images"
-      }]
-    }]
+      }
+    ]
   }).then(async commune => {
+    commune.images.map(async image => {
+      await fs.unlink(path.join(__dirname, `../public/images/communes/${image.nom}`));
+    });
     commune.objets.map(async objet => {
       objet.images.map(async image => {
         await fs.unlink(path.join(__dirname, `../public/images/objets/${image.nom}`));
@@ -107,32 +116,6 @@ exports.attributs = function(req, res) {
   }).then(attributs => res.json(attributs));
 }
 
-exports.delete = function(req, res) {
-  Commune.findOne({
-    where: {
-      id: req.params.id
-    },
-    include: [
-      {
-        model: CommuneImage,
-        as: "images"
-      },
-    ]
-  }).then(commune => {
-    commune.images.map(image => {
-      fs.unlink(path.join(__dirname, `../public/images/communes/${image.nom}`));
-    });
-    Commune.destroy({
-      where: {
-        id: commune.id,
-      }
-    }).then(() => {
-      return res.sendStatus(200);
-    });
-  }).catch(err => {
-    return res.sendStatus(403);
-  });
-}
 
 exports.deleteImage = function(req, res) {
   CommuneImage.findOne({

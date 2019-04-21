@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const Category = require('../models/Category');
 const Objet = require('../models/Objet');
 const ObjetImage = require('../models/ObjetImage');

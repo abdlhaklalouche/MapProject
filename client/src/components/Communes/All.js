@@ -102,7 +102,7 @@ class Communes extends Component {
                       <option value="">Tout les villes..</option>
                       {this.state.villes.map((ville, key) => {
                         return (
-                          <option value={ville.numero} key={key}>{ville.nom}</option>
+                          <option value={ville.id} key={key}>{ville.nom}</option>
                         )
                       })}
                     </Input>
