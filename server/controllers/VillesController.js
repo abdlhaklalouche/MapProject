@@ -231,7 +231,9 @@ exports.edit = function(req, res) {
         });
       });
       return res.sendStatus(200);
-    })
+    }).catch(err => {
+      return res.sendStatus(403);
+    });
   }).catch(err => {
     return res.sendStatus(403);
   });
