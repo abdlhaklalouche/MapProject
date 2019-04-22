@@ -15,6 +15,9 @@ const Commune = db.define('commune', {
   },
   code_postal: {
     type: Sequelize.INTEGER
+  },
+  frontieres: {
+    type: Sequelize.JSON
   }
 }, {
   timestamps: false

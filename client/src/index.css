@@ -26,3 +26,8 @@ body {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.leaflet {
+  height: 300px;
+  width: 100%;
+}

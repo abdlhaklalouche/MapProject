@@ -21,6 +21,9 @@ const Ville = db.define('ville', {
   },
   population: {
     type: Sequelize.INTEGER
+  },
+  frontieres: {
+    type: Sequelize.JSON
   }
 }, {
   timestamps: false

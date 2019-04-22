@@ -17,6 +17,7 @@ class AddCommune extends Component {
     ville: '',
     nom: '',
     code_postal: '',
+    frontieres: '',
     images: [],
   };
 
@@ -50,7 +51,7 @@ class AddCommune extends Component {
   handleImagesChange = e => this.setState({images: e.target.files})
 
   submit = e => {
-    const { ville, nom,  code_postal, images, attributs } = this.state;
+    const { ville, nom,  code_postal, frontieres, images, attributs } = this.state;
     let details = [], errors = [];
     if(ville.length === 0) errors.push(`La ville est requis`)
     if(nom.length === 0) errors.push(`Le nom est requis`)
@@ -71,6 +72,7 @@ class AddCommune extends Component {
           formData.append('villes_id', ville);
           formData.append('nom', nom);
           formData.append('code_postal', code_postal);
+          formData.append('frontieres', frontieres);
           for( var i = 0; i < images.length; i++ ){
             let file = images[i];
             formData.append('images', file);
@@ -123,6 +125,10 @@ class AddCommune extends Component {
                 <FormGroup>
                   <Label>Code postal <span className="text-danger">*</span></Label>
                   <Input type="text" name="code_postal" onChange={this.handleChange} />
+                </FormGroup>
+                <FormGroup>
+                  <Label>Frontieres</Label>
+                  <Input type="textarea" name="frontieres" onChange={this.handleChange} />
                 </FormGroup>
                 <FormGroup>
                   <Label for="images">Images</Label>

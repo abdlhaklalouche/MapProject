@@ -24,6 +24,9 @@ exports.all = function(req, res) {
     where['code_postal'] = req.query.code_postal
   Commune.findAll({
     where,
+    attributes: [
+      'id', 'nom', 'code_postal'
+    ],
     include: [{
       model: Objet,
       as: "objets"
@@ -137,14 +140,14 @@ exports.deleteImage = function(req, res) {
 }
 
 exports.add = async function(req, res) {
-  const { villes_id, nom,  code_postal, details} = req.body;
+  const { villes_id, nom,  code_postal, frontieres, details} = req.body;
   const images = req.files;
   const parsedDetails = JSON.parse(details);
   const imagePath = path.join(__dirname, '../public/images/communes');
   const fileUpload = new Resize(imagePath);
 
   Commune.create({
-    villes_id, nom, code_postal
+    villes_id, nom, code_postal, frontieres: JSON.parse(frontieres)
   }).then(commune => {
     parsedDetails.map(detail => {
       CommuneAttributDetail.create({
@@ -167,7 +170,7 @@ exports.add = async function(req, res) {
 }
 
 exports.edit = function(req, res) {
-  const { villes_id, nom, details} = req.body;
+  const { villes_id, nom, frontieres, details} = req.body;
   const images = req.files;
   const parsedDetails = JSON.parse(details);
   const imagePath = path.join(__dirname, '../public/images/communes');
@@ -193,7 +196,7 @@ exports.edit = function(req, res) {
     ]
   }).then(commune => {
     commune.update({
-      villes_id, nom
+      villes_id, nom, frontieres: JSON.parse(frontieres)
     }).then(commune => {
       CommuneAttributDetail.destroy({
         where: {

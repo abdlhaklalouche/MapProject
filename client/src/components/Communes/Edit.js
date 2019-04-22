@@ -21,6 +21,7 @@ class AddCommune extends Component {
     ville: '',
     nom: '',
     code_postal: '',
+    frontieres: '',
     images: [],
     communeImages: [],
   };
@@ -50,6 +51,7 @@ class AddCommune extends Component {
             ville: commune.ville.id,
             nom: commune.nom,
             code_postal: commune.code_postal,
+            frontieres: commune.frontieres,
             communeImages: commune.images,
           });
           commune.details.map(detail => this.setState(() => ({
@@ -75,7 +77,7 @@ class AddCommune extends Component {
   handleImagesChange = e => this.setState({images: e.target.files})
 
   submit = e => {
-    const { commune, ville, nom, images, attributs } = this.state;
+    const { commune, ville, nom, images, frontieres, attributs } = this.state;
     let details = [], errors = [];
     if(ville.length === 0) errors.push(`La ville est requis`)
     if(nom.length === 0) errors.push(`Le nom est requis`)
@@ -90,6 +92,7 @@ class AddCommune extends Component {
       const formData = new FormData();
       formData.append('villes_id', ville);
       formData.append('nom', nom);
+      formData.append('frontieres', JSON.stringify(frontieres));
       for( var i = 0; i < images.length; i++ ){
         let file = images[i];
         formData.append('images', file);
@@ -123,7 +126,7 @@ class AddCommune extends Component {
   }
 
   render() {
-    const { villes, commune, nom, code_postal, communeImages } = this.state;
+    const { villes, commune, nom, code_postal, frontieres, communeImages } = this.state;
     return (
       this.state.loading ? null : !this.state.found ? (<div>404 page non trouvé</div>) : (
       <div>
@@ -148,6 +151,10 @@ class AddCommune extends Component {
                 <FormGroup>
                   <Label>Code postal <span className="text-danger">*</span></Label>
                   <Input type="text" name="code_postal" defaultValue={code_postal} onChange={this.handleChange} />
+                </FormGroup>
+                <FormGroup>
+                  <Label>Frontieres</Label>
+                  <Input type="textarea" name="frontieres" defaultValue={JSON.stringify(frontieres)} onChange={this.handleChange} />
                 </FormGroup>
                 <FormGroup>
                   <Label for="images">Images</Label>

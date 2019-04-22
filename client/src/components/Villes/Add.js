@@ -17,6 +17,7 @@ class AddVille extends Component {
     nom: '',
     superficie: '',
     population: '',
+    frontieres: '',
     images: [],
   };
 
@@ -45,7 +46,7 @@ class AddVille extends Component {
   handleImagesChange = e => this.setState({images: e.target.files})
 
   submit = e => {
-    const { numero, nom,  superficie, population, images, attributs } = this.state;
+    const { numero, nom,  superficie, population, frontieres, images, attributs } = this.state;
     let details = [], errors = [];
     if(numero.length === 0) errors.push(`Le numero est requis`)
     if(nom.length === 0) errors.push(`Le nom est requis`)
@@ -68,6 +69,7 @@ class AddVille extends Component {
           formData.append('nom', nom);
           formData.append('superficie', superficie);
           formData.append('population', population);
+          formData.append('frontieres', frontieres);
           for( var i = 0; i < images.length; i++ ){
             let file = images[i];
             formData.append('images', file);
@@ -118,6 +120,10 @@ class AddVille extends Component {
                 <FormGroup>
                   <Label>Population <span className="text-danger">*</span></Label>
                   <Input type="text" name="population" onChange={this.handleChange} />
+                </FormGroup>
+                <FormGroup>
+                  <Label>Frontieres</Label>
+                  <Input type="textarea" name="frontieres" onChange={this.handleChange} />
                 </FormGroup>
                 <FormGroup>
                   <Label for="images">Images</Label>

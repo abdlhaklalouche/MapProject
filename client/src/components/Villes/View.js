@@ -8,6 +8,8 @@ import {
   ListGroup,
   ListGroupItem
 } from 'reactstrap';
+import L from 'leaflet';
+import { Map , GeoJSON, TileLayer } from 'react-leaflet';
 import Back from '../Back';
 import AttributList from './AttributList';
 const axios = require('axios');
@@ -107,6 +109,15 @@ class Ville extends Component {
                 </ListGroup>
               </Col>
               <Col sm="5">
+                {ville.frontieres ? (
+                  <Map bounds={L.geoJson(ville.frontieres).getBounds()} zoom={13} className="leaflet">
+                    <TileLayer
+                      attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                      url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                    />
+                    <GeoJSON data={ville.frontieres} />
+                  </Map>
+                ) : null} 
                 <div>
                   {ville.images.map((image, key) => {
                     return (<img src={`http://localhost:5000/images/villes/${image.nom}`} key={key} alt="" width="150" height="150" className="m-1" />)

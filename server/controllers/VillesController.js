@@ -23,6 +23,9 @@ exports.all = function(req, res) {
     where['numero'] = req.query.numero
   Ville.findAll({
     where,
+    attributes: [
+      'id', 'numero', 'nom', 'superficie', 'population'
+    ],
     include: [{
       model: Commune,
       as: "communes",
@@ -152,14 +155,14 @@ exports.deleteImage = function(req, res) {
 }
 
 exports.add = async function(req, res) {
-  const { numero, nom,  superficie, population, details} = req.body;
+  const { numero, nom,  superficie, population, frontieres, details} = req.body;
   const images = req.files;
   const parsedDetails = JSON.parse(details);
   const imagePath = path.join(__dirname, '../public/images/villes');
   const fileUpload = new Resize(imagePath);
 
   Ville.create({
-    numero, nom,  superficie, population
+    numero, nom,  superficie, population, frontieres: JSON.parse(frontieres)
   }).then(ville => {
     parsedDetails.map(detail => {
       VilleAttributDetail.create({
@@ -182,7 +185,7 @@ exports.add = async function(req, res) {
 }
 
 exports.edit = function(req, res) {
-  const { nom,  superficie, population, details} = req.body;
+  const { nom,  superficie, population, frontieres, details} = req.body;
   const images = req.files;
   const parsedDetails = JSON.parse(details);
   const imagePath = path.join(__dirname, '../public/images/villes');
@@ -208,7 +211,7 @@ exports.edit = function(req, res) {
     ]
   }).then(ville => {
     ville.update({
-      nom, superficie, population
+      nom, superficie, population, frontieres: JSON.parse(frontieres)
     }).then(ville => {
       VilleAttributDetail.destroy({
         where: {
