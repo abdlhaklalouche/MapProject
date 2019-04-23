@@ -8,6 +8,7 @@ import {
   ListGroup,
   ListGroupItem
 } from 'reactstrap';
+import { Map , Marker, Popup, Circle, GeoJSON, FeatureGroup, TileLayer } from 'react-leaflet';
 import Back from '../Back';
 import AttributList from './AttributList';
 const axios = require('axios');
@@ -17,20 +18,78 @@ class Objet extends Component {
     loading: true,
     found: false,
     objet: {},
+    maps: [],
   };
 
-  componentWillMount() {
+  componentDidMount() {
     axios.get(`http://localhost:5000/objets/${this.props.match.params.id}`).then((response) => {
       this.setState({
         loading: false,
       });
       if(response.data) {
+        const objet = response.data;
         this.setState({
           found: true,
-          objet: response.data,
+          objet,
+        });
+        objet.details.map(detail => {
+          // eslint-disable-next-line default-case
+          switch(detail.categories_attribut.categories_attributs_type.nom) {
+            case 'coordonnees':
+              var markerCoordonnees = detail.valeur.toString().split(',');
+              const markerLat = parseFloat(markerCoordonnees[0]);
+              const markerLng = parseFloat(markerCoordonnees[1]);
+              this.setState({
+                maps: [
+                  ...this.state.maps,
+                  (
+                    <Marker position={[markerLat, markerLng]} key={detail.id}>
+                      <Popup>{detail.categories_attribut.nom}</Popup>
+                    </Marker>
+                  )
+                ]
+              });
+            break;
+            case 'cercle':
+              var circleCoordonnees = detail.valeur.toString().split(',');
+              const circleLat = parseFloat(circleCoordonnees[0]);
+              const circleLng = parseFloat(circleCoordonnees[1]);
+              const radius = parseInt(circleCoordonnees[2]);
+              this.setState({
+                maps: [
+                  ...this.state.maps,
+                  (
+                    <Circle 
+                      key={detail.id}
+                      center={[circleLat, circleLng]}
+                      fillColor="blue" 
+                      radius={radius}>
+                      <Popup>{detail.categories_attribut.nom}</Popup>
+                    </Circle>
+                  )
+                ]
+              });
+            break;
+            case 'polygone':
+              var positions =  JSON.parse(detail.valeur);
+              this.setState({
+                maps: [
+                  ...this.state.maps,
+                  (
+                    <GeoJSON data={positions} key={detail.id}>
+                      <Popup>{detail.categories_attribut.nom}</Popup>
+                    </GeoJSON>
+                  )
+                ]
+              });
+            break;
+          }
         });
       }
-    });    
+      if(this.state.maps.length > 0) {
+        this.refs.map.leafletElement.fitBounds(this.refs.featureGroup.leafletElement.getBounds(), {maxZoom: 13, padding: [20, 20]});
+      }
+    });
   }
 
   delete = (objet_id) => {
@@ -42,7 +101,7 @@ class Objet extends Component {
   }
   
   render() {
-    const { objet } = this.state;
+    const { objet, maps } = this.state;
     return (
       this.state.loading ? null : !this.state.found ? (<div>404 page non trouvé</div>) : (
         <div>
@@ -85,6 +144,17 @@ class Objet extends Component {
                 </ListGroup>
               </Col>
               <Col sm="5">
+                {maps.length > 0 ? (
+                  <Map ref="map" zoom={13} minZoom={0} className="leaflet">
+                    <TileLayer
+                      attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                      url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                      />
+                    <FeatureGroup ref="featureGroup">
+                      {maps}
+                    </FeatureGroup>
+                  </Map>
+                ) : null}
                 <div>
                   {objet.images.map((image, key) => {
                     return (<img src={`http://localhost:5000/images/objets/${image.nom}`} key={key} alt="" width="150" height="150" className="m-1" />)

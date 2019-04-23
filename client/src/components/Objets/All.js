@@ -8,6 +8,7 @@ import {
   FormGroup,
   Button
 } from 'reactstrap';
+import { Map , Marker, Popup, Circle, GeoJSON, FeatureGroup, TileLayer } from 'react-leaflet';
 import Back from '../Back';
 const axios = require('axios');
 const queryString = require('query-string');
@@ -22,7 +23,8 @@ class Objets extends Component {
     ville: false,
     commune: false,
     category: false,
-    query: ''
+    query: '',
+    maps: []
   };
   
   componentDidMount() {
@@ -70,10 +72,69 @@ class Objets extends Component {
           category: this.state.category
         }
       }).then(response => {
+        const objets = response.data;
         this.setState({
-          objets: response.data,
+          objets,
           loading: false
         });
+        objets.map(objet => {
+          objet.details.map(detail => {
+            // eslint-disable-next-line default-case
+            switch(detail.categories_attribut.categories_attributs_type.nom) {
+              case 'coordonnees':
+                var markerCoordonnees = detail.valeur.toString().split(',');
+                const markerLat = parseFloat(markerCoordonnees[0]);
+                const markerLng = parseFloat(markerCoordonnees[1]);
+                this.setState({
+                  maps: [
+                    ...this.state.maps,
+                    (
+                      <Marker position={[markerLat, markerLng]} key={detail.id}>
+                        <Popup>{`${objet.nom} ${detail.categories_attribut.nom}`}</Popup>
+                      </Marker>
+                    )
+                  ]
+                });
+              break;
+              case 'cercle':
+                var circleCoordonnees = detail.valeur.toString().split(',');
+                const circleLat = parseFloat(circleCoordonnees[0]);
+                const circleLng = parseFloat(circleCoordonnees[1]);
+                const radius = parseInt(circleCoordonnees[2]);
+                this.setState({
+                  maps: [
+                    ...this.state.maps,
+                    (
+                      <Circle 
+                        key={detail.id}
+                        center={[circleLat, circleLng]}
+                        fillColor="blue" 
+                        radius={radius}>
+                        <Popup>{`${objet.nom} ${detail.categories_attribut.nom}`}</Popup>
+                      </Circle>
+                    )
+                  ]
+                });
+              break;
+              case 'polygone':
+                var positions =  JSON.parse(detail.valeur);
+                this.setState({
+                  maps: [
+                    ...this.state.maps,
+                    (
+                      <GeoJSON data={positions} key={detail.id}>
+                        <Popup>{`${objet.nom} ${detail.categories_attribut.nom}`}</Popup>
+                      </GeoJSON>
+                    )
+                  ]
+                });
+              break;
+            }
+          });
+        });
+        if(this.state.maps.length > 0) {
+          this.refs.map.leafletElement.fitBounds(this.refs.featureGroup.leafletElement.getBounds(), {maxZoom: 13, padding: [20, 20]});
+        }
       });
     });
   }
@@ -97,6 +158,7 @@ class Objets extends Component {
   };
 
   render() {
+    const { maps } = this.state;
     return (
       <div>
         <Back title="Les objet dans l'algerie" />
@@ -156,29 +218,46 @@ class Objets extends Component {
           <div>
             <p>{this.state.objets.length} résultat trouvé</p>
           </div>
-          { this.state.loading ? (
-              <div className="py-2 text-center">
-                <Spinner style={{ width: '3rem', height: '3rem' }} />
-              </div>
-            ) : this.state.objets.length > 0 ? (
-              <Table borderless striped>
-                <thead>
-                  <tr>
-                    <th>Numero</th>
-                    <th>Nom</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.objets.map((objet, key) => (
-                    <tr key={key} className="cursor-pointer" onClick={() => this.props.history.push(`/objets/${objet.id}`)}>
-                      <th scope="row">{objet.id}</th>
-                      <td>{objet.nom}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            ) : null
-          }
+          <Row>
+            <Col sm="8">  
+              {this.state.loading ? (
+                  <div className="py-2 text-center">
+                    <Spinner style={{ width: '3rem', height: '3rem' }} />
+                  </div>
+                ) : this.state.objets.length > 0 ? (
+                  <Table borderless striped>
+                    <thead>
+                      <tr>
+                        <th>Numero</th>
+                        <th>Nom</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.objets.map((objet, key) => (
+                        <tr key={key} className="cursor-pointer" onClick={() => this.props.history.push(`/objets/${objet.id}`)}>
+                          <th scope="row">{objet.id}</th>
+                          <td>{objet.nom}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                ) : null
+              }
+            </Col>
+            <Col sm="4">
+              {maps.length > 0 ? (
+                <Map ref="map" zoom={13} className="leaflet">
+                  <TileLayer
+                    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                    />
+                  <FeatureGroup ref="featureGroup">
+                    {maps}
+                  </FeatureGroup>
+                </Map>
+              ) : null}
+            </Col>
+          </Row>
         </Container>
       </div>
     );

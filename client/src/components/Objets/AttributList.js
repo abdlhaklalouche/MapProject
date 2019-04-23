@@ -16,7 +16,7 @@ export default class AttributList extends Component {
       default:
       break;
     }
-    return (
+    return ['coordonnees', 'cercle', 'polygone'].includes(detail.categories_attribut.categories_attributs_type.nom) ? null : (
       <ListGroupItem>
         <dl className="row my-0">
           <dt className="col-sm-5">{detail.categories_attribut.nom}</dt>

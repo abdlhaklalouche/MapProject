@@ -6,6 +6,8 @@ export default class AttributField extends Component {
     const defaultValue = this.props.defaultValue ? this.props.defaultValue : '';
     let input = '';
     switch(attribut.categories_attributs_type.nom) {
+      case 'coordonnees':
+      case 'cercle':
       case 'string':
         input = (
           <FormGroup>
@@ -24,6 +26,7 @@ export default class AttributField extends Component {
           </FormGroup>
         )
       break;
+      case 'polygone':
       case 'text':
         input = (
           <FormGroup>

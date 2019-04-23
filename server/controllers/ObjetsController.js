@@ -28,10 +28,12 @@ exports.all = async function(req, res) {
         where: {
           id: req.query.ville
         },
-        include: [{
-          model: Commune,
-          as: "communes"
-        }]
+        include: [
+          {
+            model: Commune,
+            as: "communes"
+          },
+        ]
       });
       if(ville) {
         let commune_ids = [];
@@ -42,7 +44,21 @@ exports.all = async function(req, res) {
       }
     }
   }
-  Objet.findAll({where}).then(objets => res.json(objets));
+  Objet.findAll({
+    where,
+    include: [{
+      model: ObjetAttributDetail,
+      as: "details",
+      include: [{
+        model: CategoryAttribut,
+        as: "categories_attribut",
+        include: [{
+          model: CategoryAttributType,
+          "as": "categories_attributs_type"
+        }]
+      }]
+    }]
+  }).then(objets => res.json(objets));
 }
 
 exports.single = function(req, res) {
