@@ -10,6 +10,7 @@
 
 # production
 /build
+/Map Project-darwin-x64
 
 # misc
 .DS_Store
