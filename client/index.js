@@ -12,6 +12,17 @@ function createWindow () {
 
   var template = [
     {
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+      ]
+    },
+    {
       label: "Villes",
       submenu: [
         {
