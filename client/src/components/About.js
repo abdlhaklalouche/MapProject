@@ -13,7 +13,7 @@ class About extends Component {
           <h1 className="mt-5">A propos de nous</h1>
           <h5>Abdelhak Lallouche et Abdelhafid bachtouti</h5>
           <div className="mt-5">
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            <p>L’objectif ciblé dans notre projet de fin d’études est la conception et le développement d'une application qui gère les objets et les emplacements dans la carte, Notre travail consiste à analyser, ajouter, mettre à jour et supprimer des villes, des communes, des catégories, des objets et des emplacements dans la carte avec des attributs dynamiques. Pour cela, on a conçu et mis en œuvre une base de données, implémentée sous le SGBD Oracle Mysql Workbench et interfacée par la langage Javascript/ElectronJs et nous avons traité la carte en utilisant la librairie appelée leaflet.</p>
           </div>
         </Container>
       </div>

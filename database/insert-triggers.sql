@@ -8,7 +8,6 @@ DROP TRIGGER VilleInsertCheckPopulation;
 DROP TRIGGER VilleUpdateCheckPopulation;
 
 CREATE TRIGGER VilleInsertCheckSuperficie BEFORE INSERT ON villes
-FOR EACH ROW
 BEGIN
 	SET @TotalVillesSuperficie = (SELECT SUM(`superficie`) FROM villes);
 	SET @TotalSuperficie = @TotalVillesSuperficie + NEW.superficie;
@@ -20,7 +19,6 @@ END; //
 
 
 CREATE TRIGGER VilleUpdateCheckSuperficie BEFORE UPDATE ON villes
-FOR EACH ROW
 BEGIN
 	SET @TotalVillesSuperficie = (SELECT SUM(`superficie`) FROM villes where `id`<>NEW.id);
 	SET @TotalSuperficie = @TotalVillesSuperficie + NEW.superficie;
@@ -31,7 +29,6 @@ BEGIN
 END; //
 
 CREATE TRIGGER VilleInsertCheckPopulation BEFORE INSERT ON villes
-FOR EACH ROW
 BEGIN
 	SET @TotalVillesPopulation = (SELECT SUM(`population`) FROM villes);
 	SET @TotalPopulation = @TotalVillesPopulation + NEW.population;
@@ -43,7 +40,6 @@ END; //
 
 
 CREATE TRIGGER VilleUpdateCheckPopulation BEFORE UPDATE ON villes
-FOR EACH ROW
 BEGIN
 	SET @TotalVillesPopulation = (SELECT SUM(`population`) FROM villes where `id`<>NEW.id);
 	SET @TotalPopulation = @TotalVillesPopulation + NEW.population;
